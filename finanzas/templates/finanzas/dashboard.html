@@ -1,0 +1,482 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container-fluid">
+
+    <h2 class="mb-3 fw-bold">
+        Dashboard Financiero
+    </h2>
+
+    <!-- TARJETAS -->
+
+    <div class="row">
+
+        <!-- TOTAL VENTAS -->
+        <div class="col-lg-3 col-md-6 col-sm-12">
+
+            <div class="card shadow-sm border-0 rounded-4 mb-3">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted mb-1">
+                        💰 Total Ventas
+                    </h6>
+
+                    <h3 class="fw-bold text-success">
+                        $ {{ total_ventas|floatformat:2 }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TOTAL GASTOS -->
+        <div class="col-lg-3 col-md-6 col-sm-12">
+
+            <div class="card shadow-sm border-0 rounded-4 mb-3">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted mb-1">
+                        📉 Total Gastos
+                    </h6>
+
+                    <h3 class="fw-bold text-danger">
+                        $ {{ total_gastos|floatformat:2 }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- GANANCIA -->
+        <div class="col-lg-3 col-md-6 col-sm-12">
+
+            <div class="card shadow-sm border-0 rounded-4 mb-3">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted mb-1">
+                        📈 Ganancia
+                    </h6>
+
+                    <h3 class="fw-bold text-primary">
+                        $ {{ ganancia|floatformat:2 }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PRODUCTOS -->
+        <div class="col-lg-3 col-md-6 col-sm-12">
+
+            <div class="card shadow-sm border-0 rounded-4 mb-3">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted mb-1">
+                        📦 Productos
+                    </h6>
+
+                    <h3 class="fw-bold">
+                        {{ total_productos }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- INVENTARIO -->
+
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm border-0 rounded-4 mb-3">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted mb-1">
+                        🏪 Valor Inventario
+                    </h6>
+
+                    <h3 class="fw-bold text-dark">
+                        $ {{ valor_inventario|floatformat:2 }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- GRAFICOS -->
+
+    <div class="row">
+
+        <!-- VENTAS POR DIA -->
+        <div class="col-lg-6 col-md-6 col-sm-12">
+
+            <div class="card shadow-sm border-0 rounded-4 mb-3">
+
+                <div class="card-body">
+
+                    <h6 class="fw-bold mb-2">
+                        Ventas por Día
+                    </h6>
+
+                    <div style="height:160px;">
+
+                        <canvas id="ventasDia"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- GASTOS POR DIA -->
+        <div class="col-lg-6 col-md-6 col-sm-12">
+
+            <div class="card shadow-sm border-0 rounded-4 mb-3">
+
+                <div class="card-body">
+
+                    <h6 class="fw-bold mb-2">
+                        Gastos por Día
+                    </h6>
+
+                    <div style="height:160px;">
+
+                        <canvas id="gastosDia"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- GRAFICOS MENSUALES -->
+
+    <div class="row">
+
+        <!-- VENTAS POR MES -->
+        <div class="col-lg-6 col-md-6 col-sm-12">
+
+            <div class="card shadow-sm border-0 rounded-4 mb-3">
+
+                <div class="card-body">
+
+                    <h6 class="fw-bold mb-2">
+                        Ventas por Mes
+                    </h6>
+
+                    <div style="height:160px;">
+
+                        <canvas id="ventasMes"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- GASTOS POR MES -->
+        <div class="col-lg-6 col-md-6 col-sm-12">
+
+            <div class="card shadow-sm border-0 rounded-4 mb-3">
+
+                <div class="card-body">
+
+                    <h6 class="fw-bold mb-2">
+                        Gastos por Mes
+                    </h6>
+
+                    <div style="height:160px;">
+
+                        <canvas id="gastosMes"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    // CONFIGURACION GENERAL
+
+    const opcionesGraficos = {
+
+        responsive: true,
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                labels: {
+
+                    font: {
+
+                        size: 10
+
+                    }
+
+                }
+
+            }
+
+        },
+
+        scales: {
+
+            x: {
+
+                ticks: {
+
+                    font: {
+
+                        size: 9
+
+                    }
+
+                }
+
+            },
+
+            y: {
+
+                ticks: {
+
+                    font: {
+
+                        size: 9
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    };
+
+    // =========================
+    // VENTAS POR DIA
+    // =========================
+
+    const ventasDia = document.getElementById('ventasDia');
+
+    new Chart(ventasDia, {
+
+        type: 'line',
+
+        data: {
+
+            labels: [
+
+                {% for item in ventas_por_dia %}
+
+                    '{{ item.fecha_dia }}',
+
+                {% endfor %}
+
+            ],
+
+            datasets: [{
+
+                label: 'Ventas',
+
+                data: [
+
+                    {% for item in ventas_por_dia %}
+
+                        {{ item.total }},
+
+                    {% endfor %}
+
+                ],
+
+                borderWidth: 2
+
+            }]
+
+        },
+
+        options: opcionesGraficos
+
+    });
+
+    // =========================
+    // GASTOS POR DIA
+    // =========================
+
+    const gastosDia = document.getElementById('gastosDia');
+
+    new Chart(gastosDia, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: [
+
+                {% for item in gastos_por_dia %}
+
+                    '{{ item.fecha_dia }}',
+
+                {% endfor %}
+
+            ],
+
+            datasets: [{
+
+                label: 'Gastos',
+
+                data: [
+
+                    {% for item in gastos_por_dia %}
+
+                        {{ item.total }},
+
+                    {% endfor %}
+
+                ],
+
+                borderWidth: 1
+
+            }]
+
+        },
+
+        options: opcionesGraficos
+
+    });
+
+    // =========================
+    // VENTAS POR MES
+    // =========================
+
+    const ventasMes = document.getElementById('ventasMes');
+
+    new Chart(ventasMes, {
+
+        type: 'line',
+
+        data: {
+
+            labels: [
+
+                {% for item in ventas_por_mes %}
+
+                    '{{ item.mes|date:"M Y" }}',
+
+                {% endfor %}
+
+            ],
+
+            datasets: [{
+
+                label: 'Ventas Mes',
+
+                data: [
+
+                    {% for item in ventas_por_mes %}
+
+                        {{ item.total }},
+
+                    {% endfor %}
+
+                ],
+
+                borderWidth: 2
+
+            }]
+
+        },
+
+        options: opcionesGraficos
+
+    });
+
+    // =========================
+    // GASTOS POR MES
+    // =========================
+
+    const gastosMes = document.getElementById('gastosMes');
+
+    new Chart(gastosMes, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: [
+
+                {% for item in gastos_por_mes %}
+
+                    '{{ item.mes|date:"M Y" }}',
+
+                {% endfor %}
+
+            ],
+
+            datasets: [{
+
+                label: 'Gastos Mes',
+
+                data: [
+
+                    {% for item in gastos_por_mes %}
+
+                        {{ item.total }},
+
+                    {% endfor %}
+
+                ],
+
+                borderWidth: 1
+
+            }]
+
+        },
+
+        options: opcionesGraficos
+
+    });
+
+</script>
+
+{% endblock %}

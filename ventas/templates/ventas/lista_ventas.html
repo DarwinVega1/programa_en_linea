@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between mb-4">
+
+    <h2>Ventas</h2>
+
+    <a href="{% url 'nueva_venta' %}" class="btn btn-primary">
+        Nueva Venta
+    </a>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <table class="table table-hover">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Cliente</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for venta in ventas %}
+
+                <tr>
+                    <td>{{ venta.cliente.nombres }}</td>
+                    <td>{{ venta.producto.nombre }}</td>
+                    <td>{{ venta.cantidad }}</td>
+                    <td>{{ venta.precio }}</td>
+                    <td>{{ venta.total }}</td>
+                    <td>{{ venta.fecha }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

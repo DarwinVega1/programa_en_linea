@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between mb-3">
+
+            <h2>
+                Inventario
+            </h2>
+
+        </div>
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Talla</th>
+                    <th>Stock</th>
+                    <th>Precio</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for producto in productos %}
+
+                <tr>
+
+                    <td>{{ producto.codigo }}</td>
+
+                    <td>{{ producto.nombre }}</td>
+
+                    <td>{{ producto.talla }}</td>
+
+                    <td>{{ producto.stock }}</td>
+
+                    <td>${{ producto.precio }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

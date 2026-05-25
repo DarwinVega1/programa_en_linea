@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Entrada de Mercadería</h2>
+
+<a href="{% url 'nuevo_ingreso' %}" class="btn btn-primary">
+    Nuevo Ingreso
+</a>
+
+<table class="table mt-3">
+
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Talla</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for ingreso in ingresos %}
+        <tr>
+            <td>{{ ingreso.producto.codigo }}</td>
+            <td>{{ ingreso.producto.nombre }}</td>
+            <td>{{ ingreso.talla }}</td>
+            <td>{{ ingreso.cantidad }}</td>
+            <td>{{ ingreso.precio }}</td>
+
+            <td>
+                <a href="{% url 'editar_ingreso' ingreso.id %}" class="btn btn-warning btn-sm">
+                    Editar
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+{% endblock %}

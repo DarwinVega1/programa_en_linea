@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between mb-4">
+
+    <h2>Gastos</h2>
+
+    <a href="/gastos/nuevo/" class="btn btn-primary">
+        Nuevo Gasto
+    </a>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <table class="table table-hover">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Tipo</th>
+                    <th>Descripción</th>
+                    <th>Valor</th>
+                    <th>Fecha</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for gasto in gastos %}
+
+                <tr>
+
+                    <td>{{ gasto.tipo }}</td>
+                    <td>{{ gasto.descripcion }}</td>
+                    <td>$ {{ gasto.valor }}</td>
+                    <td>{{ gasto.fecha }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
